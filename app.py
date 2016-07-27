@@ -207,7 +207,7 @@ def refresh():
     print(hook_url)
     print('==================================')
     repo_map = link_all(hook_url)
-    
+    refreshing = False
     return 'Job done.'
     
 
