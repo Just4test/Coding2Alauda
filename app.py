@@ -1,8 +1,6 @@
 import os
 from flask import Flask, Response, redirect, request, g, url_for, render_template, send_file, jsonify, session
 import requests
-import sys
-sys.path.append('../')
 from alauda import *
 from hashlib import sha1
 
