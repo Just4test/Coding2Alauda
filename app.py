@@ -160,7 +160,7 @@ def link_all(hook_url):
             else:
                 print('创建部署公钥时出现问题')
         if not repo_map.get(path):
-            repo_map[path] = {}
+            repo_map[path] = []
         repo_map[path].append(repo)
     
     return repo_map
