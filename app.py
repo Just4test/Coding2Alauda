@@ -228,4 +228,4 @@ def hook():
         repo.build()
     return 'OK'
 
-app.run('0.0.0.0', 80)
+app.run('0.0.0.0', 8080)
