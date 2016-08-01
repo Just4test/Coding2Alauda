@@ -138,10 +138,12 @@ def link_all(hook_url):
     repo_map = {}
     for repo in alauda.list_repo():
         build_config = repo.build_config
+        print(repo, build_config, build_config.code_repo_client)
         if not build_config or build_config.code_repo_client != 'Simple':
             continue
         #找到coding的仓库
         url = build_config.code_repo_path
+        print(url)
         path = coding_git_url_to_path(url)
         if not path:
             continue
