@@ -11,6 +11,7 @@ ALAUDA_TOKEN = os.environ.get('ALAUDA_TOKEN')
 # CODING_CLIENT_SECRET = os.environ.get('CODING_CLIENT_SECRET')
 CODING_ACCOUNT = os.environ.get('CODING_ACCOUNT')
 CODING_PASSWD = os.environ.get('CODING_PASSWD')
+DEBUG_MODE = os.environ.get('DEBUG') == 'True'
 
 CODING_HOOK_TOKEN = 'fuck'
 DEPLOY_KEY_TITLE = 'link_coding_alauda'
@@ -42,7 +43,6 @@ def login_coding(captcha = None):
         global coding_cookies
         coding_cookies = r.cookies
         return 0, None
-    
     return code, r.json()['msg']
     
     
@@ -65,12 +65,13 @@ def coding_list_git():
     '列出coding git'
     git_map = {}
     url = 'https://coding.net/api/user/projects'
-    data = {
+    params = {
         'pageSize': 9999
     }
-    r = requests.get(url, data = data, cookies = coding_cookies)
+    r = requests.get(url, params = params, cookies = coding_cookies)
     json = r.json()
     if r.status_code == 200 and json.get('code') == 0:
+        print()
         for g in json['data']['list']:
             key = g['owner_user_name'] + '/' + g['name']
             git_map[key] = True
@@ -125,7 +126,7 @@ def coding_git_url_to_path(url):
     '将git仓库url转为coding的owner和name对'
     def check_and_strip(s):
             if url.find(s) == 0:
-                return url.lstrip(s).rstrip('.git')
+                return url[len(s): -4] #修剪掉.git
             else:
                 return None
     return check_and_strip('https://git.coding.net/') or \
@@ -145,6 +146,7 @@ def link_all(hook_url):
         url = build_config.code_repo_path
         print(url)
         path = coding_git_url_to_path(url)
+        print(path)
         if not path:
             continue
         if path not in git_map:
@@ -168,7 +170,7 @@ def link_all(hook_url):
     return repo_map
 
 app = Flask(__name__)
-app.debug = False
+app.debug = DEBUG_MODE
 
 print('必须访问主页才能初始化应用。')
 
